@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   View
 } from "react-native";
 import axios from "axios";
@@ -13,8 +14,14 @@ import { getTasks } from "../actions/task.actions";
 import { useDispatch, useSelector } from "react-redux";
 import TaskItem from "../components/TaskItem";
 
+let shouldTriggerParent = null;
+let setTheseParams = null;
+
 export default function HomeScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState(true);
+
+  shouldTriggerParent = setIsFocused;
 
   const dispatch = useDispatch();
   const dataReducer = useSelector(state => state.dataReducer);
@@ -36,11 +43,25 @@ export default function HomeScreen({ navigation }) {
     fetchTasks();
   }, []);
 
+  useEffect(() => {
+    if (isFocused) {
+      fetchTasks();
+    }
+  }, [isFocused]);
+
   // renders tasks
   renderTasks = data => {
     return data.map((task, key) => {
       return (
-        <View style={styles.task} key={key}>
+        <TouchableOpacity
+          style={styles.task}
+          key={key}
+          onPress={() =>
+            navigation.navigate("ViewTask", {
+              id: task.id
+            })
+          }
+        >
           <TaskItem
             completed={task.completed}
             description={task.description}
@@ -48,7 +69,7 @@ export default function HomeScreen({ navigation }) {
             name={task.name}
             target={task.target}
           />
-        </View>
+        </TouchableOpacity>
       );
     });
   };
@@ -73,17 +94,13 @@ export default function HomeScreen({ navigation }) {
       {isLoading && showLoading()}
       {tasks && renderList(tasks)}
       {!isLoading && (
-        <TouchableHighlight
-          style={styles.compose}
-          underlayColor="#ff7043"
-          onPress={() =>
-            navigation.navigate("CreateTask", { title: "New Task" })
-          }
-        >
-          <Text style={{ fontSize: 25, color: "white", fontSize: 14 }}>
-            Create
-          </Text>
-        </TouchableHighlight>
+        <Button
+          title="Add New"
+          iconName={"add-icon"}
+          onPress={() => {
+            navigation.navigate("CreateTask");
+          }}
+        />
       )}
     </SafeAreaView>
   );

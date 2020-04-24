@@ -21,6 +21,8 @@ export default function NewTask({ navigation }) {
   const [target, setTarget] = useState("");
   const [completed, setCompleted] = useState("");
 
+  const setIsFocused = navigation.getParam("setIsFocused");
+
   const createNewTask = () => {
     let id = Math.floor(Math.random() * Math.floor(10000000));
     let newTask = {

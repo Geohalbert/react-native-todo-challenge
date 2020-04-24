@@ -4,6 +4,7 @@ import { createStackNavigator } from "react-navigation-stack";
 // screens
 import HomeScreen from "../screens/HomeScreen";
 import CreateTaskScreen from "../screens/CreateTaskScreen";
+import ViewTaskScreen from "../screens/ViewTaskScreen";
 
 // default style
 const defaultStyle = {
@@ -29,6 +30,12 @@ const AppStack = createStackNavigator({
   },
   CreateTask: {
     screen: CreateTaskScreen,
+    navigationOptions: {
+      ...defaultStyle
+    }
+  },
+  ViewTask: {
+    screen: ViewTaskScreen,
     navigationOptions: {
       ...defaultStyle
     }

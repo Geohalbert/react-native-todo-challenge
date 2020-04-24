@@ -15,7 +15,7 @@ removeTask = async id => {
 
 deleteTaskAlert = id => {
   Alert.alert("Delete Task", "Are you sure you want to delete this task?", [
-    { text: "Delete", onPress: () => this.removeTask(id) },
+    { text: "Delete", onPress: () => removeTask(id) },
     {
       text: "Cancel",
       style: "cancel"
