@@ -1,16 +1,21 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default TaskItem = () => (
-  <View style={styles.container}>
-    <View style={styles.taskHeader}>
-      <Text style={styles.headerText}>Task Header</Text>
+export default function TaskItem(props) {
+  const { completed, description, id, name, target } = props;
+
+  // these will have touchable features
+  return (
+    <View style={styles.container}>
+      <View style={styles.cardHeader}>
+        <Text style={styles.headerText}>{name}</Text>
+      </View>
+      <View style={styles.cardBody}>
+        <Text>{description}</Text>
+      </View>
     </View>
-    <View style={styles.cardBody}>
-      <Text>Task Description.</Text>
-    </View>
-  </View>
-);
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
