@@ -1,5 +1,6 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import DeleteIcon from "./DeleteIcon";
 
 export default function TaskItem(props) {
   const { completed, description, id, name, target } = props;
@@ -10,7 +11,7 @@ export default function TaskItem(props) {
     <View style={styles.container}>
       <View style={styles.cardHeader}>
         <Text style={styles.headerText}>{name}</Text>
-        <Image source={require("../assets/delete.png")} />
+        <DeleteIcon />
       </View>
       <View style={styles.cardBody}>
         <Text style={styles.text}>Description: {description}</Text>
