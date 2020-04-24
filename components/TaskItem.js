@@ -5,13 +5,16 @@ export default function TaskItem(props) {
   const { completed, description, id, name, target } = props;
 
   // these will have touchable features
+  const status = completed ? completed : "incomplete";
   return (
     <View style={styles.container}>
       <View style={styles.cardHeader}>
         <Text style={styles.headerText}>{name}</Text>
       </View>
       <View style={styles.cardBody}>
-        <Text>{description}</Text>
+        <Text style={styles.text}>Description: {description}</Text>
+        <Text style={styles.text}>Target: {target}</Text>
+        <Text style={styles.text}>Completed: {status}</Text>
       </View>
     </View>
   );
@@ -25,7 +28,7 @@ const styles = StyleSheet.create({
   },
   cardBody: {
     backgroundColor: "white",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "center",
     padding: 10,
     borderBottomLeftRadius: 10,
@@ -49,5 +52,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     flexDirection: "row",
     alignItems: "center"
+  },
+  text: {
+    flexShrink: 1
   }
 });
