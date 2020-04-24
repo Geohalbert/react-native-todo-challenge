@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import axios from "axios";
+import { getTasks } from "../actions/task.actions";
 
+import { useDispatch, useSelector } from "react-redux";
 import TaskItem from "../components/TaskItem";
 
-export default function HomeScreen() {
-  const [tasks, setTasks] = useState([]);
+export default function HomeScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const dataReducer = useSelector(state => state.dataReducer);
+  const { tasks } = dataReducer;
+  const url =
+    "https://my-json-server.typicode.com/geohalbert/todo-server/tasks";
 
   // gather tasks
   const fetchTasks = () => {
     setIsLoading(true);
-
-    let url =
-      "https://my-json-server.typicode.com/geohalbert/todo-server/tasks";
     axios
       .get(url)
-      .then(res => res.data)
-      .then(data => setTasks(data))
+      .then(res => dispatch(getTasks(res.data)))
       .catch(error => alert(error.message))
       .finally(() => setIsLoading(false));
   };
