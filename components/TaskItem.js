@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 export default function TaskItem(props) {
   const { completed, description, id, name, target } = props;
@@ -10,6 +10,7 @@ export default function TaskItem(props) {
     <View style={styles.container}>
       <View style={styles.cardHeader}>
         <Text style={styles.headerText}>{name}</Text>
+        <Image source={require("../assets/delete.png")} />
       </View>
       <View style={styles.cardBody}>
         <Text style={styles.text}>Description: {description}</Text>
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
   cardHeader: {
     padding: 10,
     backgroundColor: "#555555",
-    justifyContent: "center",
+    justifyContent: "space-between",
     color: "white",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
