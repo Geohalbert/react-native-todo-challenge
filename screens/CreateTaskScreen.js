@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,47 +9,121 @@ import {
 } from "react-native";
 
 import { useDispatch } from "react-redux";
-import { createTask } from "../actions/task.actions";
+import { createTask, updateTask } from "../actions/task.actions";
 
 import axios from "axios";
 
-export default function NewTask({ navigation }) {
+export default function CreateNewTask({ navigation }) {
   const dispatch = useDispatch();
 
+  const setIsFocused = navigation.getParam("setIsFocused");
+  const isEditMode = navigation.getParam("isEditMode");
+
+  shouldTriggerParent = setIsFocused;
+
+  let task = navigation.getParam("task", null);
+
+  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [target, setTarget] = useState("");
+  const [id, setId] = useState("");
   const [completed, setCompleted] = useState("");
 
-  const setIsFocused = navigation.getParam("setIsFocused");
+  // fetchTaskData = async () => {
+  //   const taskId = await navigation.getParam("taskId");
+  //   setId(taskId);
 
-  const createNewTask = () => {
-    let id = Math.floor(Math.random() * Math.floor(10000000));
-    let newTask = {
-      id,
-      name,
-      description,
-      target,
-      completed
-    };
+  //   axios
+  //     .get(url, {
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //       }
+  //     })
+  //     .then(res => {
+  //       const task = res.data;
+  //       setName(task.name);
+  //       setDescription(task.description);
+  //       setTarget(task.target);
+  //       setCompleted(task.completed);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
 
-    const url =
-      "https://my-json-server.typicode.com/geohalbert/todo-server/tasks";
+  // saveTask = () => {
+  //   setIsLoading(true);
+  //   let task_ = {};
+  //   let isEdit = task !== null;
+  //   const newId = Math.floor(Math.random() * Math.floor(10000000));
 
-    axios
-      .post(url, newTask)
-      .then(res => res.data)
-      .then(data => {
-        dispatch(createTask(data));
-        navigation.goBack();
-      })
-      .catch(error => alert(error.message));
-  };
+  //   if (isEdit) {
+  //     task_ = task;
+  //   } else {
+  //     task_ = {
+  //       id: newId,
+  //       name: name,
+  //       description: description,
+  //       target: target,
+  //       completed: completed
+  //     };
+  //   }
+  //   const saveAction = isEditMode ? "modification" : "creation";
+  //   const successMessage = isEditMode
+  //     ? "Task has been updated"
+  //     : "Task has been created";
 
-  let disabled = name.length > 0 && description.length > 0 ? false : true;
+  //   const axiosCall = isEditMode
+  //     ? axios
+  //         .put(`${url}${task_.id}`, task_, {
+  //           headers: { "Content-Type": "application/json" }
+  //         })
+  //         .then(res => {
+  //           dispatch(updateTask(res.data));
+  //         })
+  //     : axios
+  //         .post(url, task_, {
+  //           headers: { "Content-Type": "application/json" }
+  //         })
+  //         .then(res => {
+  //           dispatch(createTask(res.data));
+  //         });
+
+  //   axiosCall
+  //     .then(res => {
+  //       console.log(
+  //         `typeof shouldTriggerParent: ${typeof shouldTriggerParent}`
+  //       );
+  //       isEditMode
+  //         ? // task edit successful, route to task
+  //           navigation.goBack() // task creation successful, route to home
+  //         : navigation.navigate("Home", {
+  //             reloadTasks: true,
+  //             successMessage: successMessage
+  //           });
+
+  //       if (typeof setIsFocused === "function") {
+  //         setIsFocused(true);
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   // if isEditMode, prepopulate task info
+  //   if (isEditMode && task) {
+  //     fetchTaskData(task);
+  //   }
+  // }, []);
+
+  let disabled = name && description && !isLoading ? false : true;
   return (
     <SafeAreaView style={styles.flex}>
-      <View style={styles.flex}>
+      <Text>Test</Text>
+      {/* <View style={styles.flex}>
         <TextInput
           onChangeText={text => setName(text)}
           placeholder={"Name"}
@@ -72,13 +146,13 @@ export default function NewTask({ navigation }) {
           <TouchableHighlight
             style={[styles.button]}
             disabled={disabled}
-            onPress={createNewTask}
+            onPress={() => saveTask()}
             underlayColor="#000000"
           >
             <Text style={styles.buttonText}>Save</Text>
           </TouchableHighlight>
         </View>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }

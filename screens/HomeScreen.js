@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  AsyncStorage,
   Button,
   SafeAreaView,
   ScrollView,
@@ -8,46 +9,54 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import axios from "axios";
 import { getTasks } from "../actions/task.actions";
 
 import { useDispatch, useSelector } from "react-redux";
 import TaskItem from "../components/TaskItem";
 
-let shouldTriggerParent = null;
-let setTheseParams = null;
-
 export default function HomeScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [isFocused, setIsFocused] = useState(true);
+  // const [focusState, setFocusState] = useState(true);
 
-  shouldTriggerParent = setIsFocused;
+  // useEffect(() => {
+  //   this.focusListener = navigation.addListener("didFocus", () => {
+  //     setFocusState(true);
+  //   });
+  //   this.blurListener = navigation.addListener("didBlur", () => {
+  //     setFocusState(false);
+  //   });
+  //   return () => {
+  //     this.focusListener.remove();
+  //     this.blurListener.remove();
+  //   };
+  // });
 
   const dispatch = useDispatch();
   const dataReducer = useSelector(state => state.dataReducer);
   const { tasks } = dataReducer;
-  const url =
-    "https://my-json-server.typicode.com/geohalbert/todo-server/tasks";
+  // const url =
+  //   "https://my-json-server.typicode.com/geohalbert/todo-server/tasks";
 
   // gather tasks
   const fetchTasks = () => {
     setIsLoading(true);
-    axios
-      .get(url)
-      .then(res => dispatch(getTasks(res.data)))
-      .catch(error => alert(error.message))
-      .finally(() => setIsLoading(false));
+    AsyncStorage.getItem("tasks", (err, tasks) => {
+      if (err) console.log(err);
+      else if (tasks !== null) dispatch(getTasks(JSON.parse(tasks)));
+
+      setIsLoading(false);
+    });
   };
 
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  useEffect(() => {
-    if (isFocused) {
-      fetchTasks();
-    }
-  }, [isFocused]);
+  // useEffect(() => {
+  //   if (isFocused) {
+  //     fetchTasks();
+  //   }
+  // }, [isFocused]);
 
   // renders tasks
   renderTasks = data => {
@@ -57,8 +66,9 @@ export default function HomeScreen({ navigation }) {
           style={styles.task}
           key={key}
           onPress={() =>
-            navigation.navigate("ViewTask", {
-              id: task.id
+            navigation.navigate("CreateTask", {
+              id: task.id,
+              taskName: task.name
             })
           }
         >
