@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {
+  Alert,
   AsyncStorage,
+  Image,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
+  TouchableOpacity,
   View
 } from "react-native";
 
 import { useDispatch } from "react-redux";
-import { createTask, updateTask } from "../actions/task.actions";
+import { createTask, updateTask, deleteTask } from "../actions/task.actions";
 
 import axios from "axios";
 
@@ -80,6 +83,38 @@ export default function SaveTaskScreen({ navigation }) {
     });
   };
 
+  removeTask = id => {
+    AsyncStorage.getItem("tasks", (err, tasks) => {
+      if (err) alert(err.message);
+      else if (tasks !== null) {
+        tasks = JSON.parse(tasks);
+
+        //find the index of the task with the id passed
+        const index = tasks.findIndex(obj => obj.id === id);
+
+        // remove the task
+        if (index !== -1) tasks.splice(index, 1);
+
+        //Update the local storage
+        AsyncStorage.setItem("tasks", JSON.stringify(tasks), () => {
+          dispatch(deleteTask(id));
+          navigation.navigate("Home", {
+            successMessage: "Task has been deleted"
+          });
+        });
+      }
+    });
+  };
+
+  deleteTaskAlert = () => {
+    Alert.alert("Delete Task", "Are you sure you want to delete this task?", [
+      { text: "Delete", onPress: () => removeTask(id) },
+      {
+        text: "Cancel",
+        style: "cancel"
+      }
+    ]);
+  };
   useEffect(() => {
     // if isEditMode, prepopulate task data
     if (isEditMode && task) {
@@ -128,7 +163,15 @@ SaveTaskScreen.navigationOptions = screenProps => ({
   title: screenProps.navigation.getParam("isEditMode")
     ? "Edit Task"
     : "Create Task",
-  headerRight: <View style={{ padding: 6 }}></View>,
+  headerRight: () => (
+    <TouchableOpacity
+      hitSlop={{ top: 30, bottom: 30, left: 60, right: 40 }}
+      onPress={() => deleteTaskAlert()}
+      style={styles.icon}
+    >
+      <Image source={require("../assets/delete.png")} />
+    </TouchableOpacity>
+  ),
   headerTitleStyle: {
     textAlign: "center",
     flexGrow: 1,
@@ -152,6 +195,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 70,
     padding: 12
+  },
+  icon: {
+    marginRight: 10
   },
   buttonText: {
     color: "#ffffff"
