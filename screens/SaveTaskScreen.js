@@ -13,6 +13,8 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 
+import { toTimestring, toTimestamp } from "../utils/functions";
+
 import { useDispatch } from "react-redux";
 import { createTask, updateTask, deleteTask } from "../actions/task.actions";
 
@@ -23,9 +25,6 @@ import axios from "axios";
 export default function SaveTaskScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  //const setIsFocused = navigation.getParam("setIsFocused");
-  //shouldTriggerParent = setIsFocused;
-
   const isEditMode = navigation.getParam("isEditMode", null);
   const task = navigation.getParam("task", null);
 
@@ -35,6 +34,7 @@ export default function SaveTaskScreen({ navigation }) {
   const [target, setTarget] = useState("");
   const [id, setId] = useState("");
   const [completed, setCompleted] = useState(false);
+  const [completedAt, setCompletedAt] = useState();
 
   setTaskData = task => {
     setId(task.id);
@@ -42,6 +42,7 @@ export default function SaveTaskScreen({ navigation }) {
     setDescription(task.description);
     setTarget(task.target);
     setCompleted(task.completed);
+    setCompletedAt(task.completedAt);
   };
 
   save = () => {
@@ -53,7 +54,8 @@ export default function SaveTaskScreen({ navigation }) {
       name: name,
       description: description,
       target: target,
-      completed: completed
+      completed: completed,
+      completedAt: completedAt
     };
 
     const saveAction = isEditMode ? "modification" : "creation";
@@ -109,6 +111,35 @@ export default function SaveTaskScreen({ navigation }) {
     });
   };
 
+  completeTaskAlert = () => {
+    Alert.alert(
+      "Complete Task",
+      "Are you sure you want to make this task incomplete?",
+      [
+        {
+          text: "Mark incomplete",
+          onPress: () => {
+            setCompletedAt();
+            setCompleted(false);
+          }
+        },
+        {
+          text: "Cancel",
+          style: "cancel"
+        }
+      ]
+    );
+  };
+
+  completeTask = completed => {
+    if (!completed) {
+      setCompletedAt(toTimestamp(new Date()));
+      setCompleted(true);
+    } else {
+      completeTaskAlert();
+    }
+  };
+
   deleteTaskAlert = () => {
     Alert.alert("Delete Task", "Are you sure you want to delete this task?", [
       { text: "Delete", onPress: () => removeTask(id) },
@@ -136,7 +167,7 @@ export default function SaveTaskScreen({ navigation }) {
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
           checked={completed}
-          onPress={() => setCompleted(!completed)}
+          onPress={() => completeTask(completed)}
         />
         <TextInput
           onChangeText={text => setName(text)}
@@ -155,7 +186,7 @@ export default function SaveTaskScreen({ navigation }) {
         />
         <View style={styles.date}>
           <Text>Target: </Text>
-          <DatePick date={target} onChange={setTarget} />
+          <DatePick date={target} onChange={setTarget} value={target} />
         </View>
       </View>
 

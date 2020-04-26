@@ -15,27 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 import TaskItem from "../components/TaskItem";
 
 export default function HomeScreen({ navigation }) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  // CODE I WAS WORKING ON - MAY NEED LATER
-  // const [focusState, setFocusState] = useState(true);
-
-  // useEffect(() => {
-  //   this.focusListener = navigation.addListener("didFocus", () => {
-  //     setFocusState(true);
-  //   });
-  //   this.blurListener = navigation.addListener("didBlur", () => {
-  //     setFocusState(false);
-  //   });
-  //   return () => {
-  //     this.focusListener.remove();
-  //     this.blurListener.remove();
-  //   };
-  // });
-
   const dispatch = useDispatch();
   const dataReducer = useSelector(state => state.dataReducer);
   const { tasks } = dataReducer;
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchTasks = () => {
     setIsLoading(true);
@@ -66,6 +49,7 @@ export default function HomeScreen({ navigation }) {
         >
           <TaskItem
             completed={task.completed}
+            completedAt={task.completedAt}
             description={task.description}
             id={task.id}
             name={task.name}
