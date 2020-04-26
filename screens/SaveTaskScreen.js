@@ -15,6 +15,8 @@ import {
 import { useDispatch } from "react-redux";
 import { createTask, updateTask, deleteTask } from "../actions/task.actions";
 
+import DatePick from "../components/DatePick";
+
 import axios from "axios";
 
 export default function SaveTaskScreen({ navigation }) {
@@ -122,7 +124,7 @@ export default function SaveTaskScreen({ navigation }) {
     }
   }, []);
 
-  let disabled = name && description && !isLoading ? false : true;
+  const disabled = name && description && !isLoading ? false : true;
   return (
     <SafeAreaView style={styles.flex}>
       <View style={styles.flex}>
@@ -141,6 +143,10 @@ export default function SaveTaskScreen({ navigation }) {
           maxLength={250}
           value={description}
         />
+        <View style={styles.date}>
+          <Text>Target: </Text>
+          <DatePick target={target} onChange={setTarget} />
+        </View>
       </View>
 
       <View style={styles.buttonContainer}>
@@ -195,6 +201,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 70,
     padding: 12
+  },
+  date: {
+    flexDirection: "row",
+    alignItems: "center"
   },
   icon: {
     marginRight: 10
