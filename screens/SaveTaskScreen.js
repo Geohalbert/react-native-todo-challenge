@@ -34,7 +34,7 @@ export default function SaveTaskScreen({ navigation }) {
   const [description, setDescription] = useState("");
   const [target, setTarget] = useState("");
   const [id, setId] = useState("");
-  const [completed, setCompleted] = useState(task.completed || false);
+  const [completed, setCompleted] = useState(false);
 
   setTaskData = task => {
     setId(task.id);
