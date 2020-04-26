@@ -2,6 +2,7 @@
   "tasks": [
     {
       "completed": true,
+      "completedAt": 1588118400000,
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
       "id": 1,
       "name": "first task",
@@ -9,6 +10,7 @@
     },
     {
       "completed": true,
+      "completedAt": 1586476800000,
       "description": "do eiusmod tempor incididunt ut",
       "id": 2,
       "name": "second task",
@@ -16,6 +18,7 @@
     },
     {
       "completed": false,
+      "completedAt": null,
       "description": "ut aliquip ex ea commodo consequat. Duis aute irure dolor",
       "id": 3,
       "name": "third task",
@@ -23,6 +26,7 @@
     },
     {
       "completed": false,
+      "completedAt": null,
       "description": "fourth description",
       "id": 4,
       "name": "fourth task",
