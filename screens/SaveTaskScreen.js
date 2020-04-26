@@ -160,15 +160,17 @@ export default function SaveTaskScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.flex}>
       <View style={styles.flex}>
-        <CheckBox
-          center
-          iconRight
-          title="Completed"
-          checkedIcon="dot-circle-o"
-          uncheckedIcon="circle-o"
-          checked={completed}
-          onPress={() => completeTask(completed)}
-        />
+        {completed && (
+          <CheckBox
+            center
+            iconRight
+            title="Completed"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={completed}
+            onPress={() => completeTask(completed)}
+          />
+        )}
         <TextInput
           onChangeText={text => setName(text)}
           placeholder={"Name"}
