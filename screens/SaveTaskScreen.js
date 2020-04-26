@@ -160,7 +160,7 @@ export default function SaveTaskScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.flex}>
       <View style={styles.flex}>
-        {completed && (
+        {isEditMode && (
           <CheckBox
             center
             iconRight
