@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { AsyncStorage } from "react-native";
 import { AppLoading } from "expo";
 
-import localData from "../db";
+import localData from "../utils/db";
 
 export default function Initializing(props) {
   useEffect(() => checkLocalData(), []);
