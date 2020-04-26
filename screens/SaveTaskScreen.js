@@ -1,0 +1,179 @@
+import React, { useState, useEffect } from "react";
+import {
+  AsyncStorage,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  View
+} from "react-native";
+
+import { useDispatch } from "react-redux";
+import { createTask, updateTask } from "../actions/task.actions";
+
+import axios from "axios";
+
+export default function SaveTaskScreen({ navigation }) {
+  const dispatch = useDispatch();
+
+  //const setIsFocused = navigation.getParam("setIsFocused");
+  //shouldTriggerParent = setIsFocused;
+
+  const isEditMode = navigation.getParam("isEditMode", null);
+  const task = navigation.getParam("task", null);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [target, setTarget] = useState("");
+  const [id, setId] = useState("");
+  const [completed, setCompleted] = useState("");
+
+  setTaskData = task => {
+    setId(task.id);
+    setName(task.name);
+    setDescription(task.description);
+    setTarget(task.target);
+    setCompleted(task.completed);
+  };
+
+  save = () => {
+    setIsLoading(true);
+    const newId = Math.floor(Math.random() * Math.floor(10000000));
+
+    let taskObj = {
+      id: isEditMode ? id : newId,
+      name: name,
+      description: description,
+      target: target,
+      completed: completed
+    };
+
+    const saveAction = isEditMode ? "modification" : "creation";
+    const successMessage = isEditMode
+      ? "Task has been updated"
+      : "Task has been created";
+
+    AsyncStorage.getItem("tasks", (err, tasks) => {
+      if (err) alert(err.message);
+      else if (tasks !== null) {
+        tasks = JSON.parse(tasks);
+
+        if (!isEditMode) {
+          tasks.push(taskObj);
+        } else {
+          ///if the task is in the array, replace the task by index
+          const index = tasks.findIndex(obj => obj.id === taskObj.id);
+          if (index !== -1) tasks[index] = taskObj;
+        }
+
+        //Update the local storage
+        AsyncStorage.setItem("tasks", JSON.stringify(tasks), () => {
+          if (!isEditMode) dispatch(createTask(taskObj));
+          else dispatch(updateTask(taskObj));
+          navigation.navigate("Home", {
+            successMessage
+          });
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    // if isEditMode, prepopulate task data
+    if (isEditMode && task) {
+      setTaskData(task);
+    }
+  }, []);
+
+  let disabled = name && description && !isLoading ? false : true;
+  return (
+    <SafeAreaView style={styles.flex}>
+      <View style={styles.flex}>
+        <TextInput
+          onChangeText={text => setName(text)}
+          placeholder={"Name"}
+          autoFocus={true}
+          style={[styles.name]}
+          value={name}
+        />
+        <TextInput
+          multiline={true}
+          onChangeText={text => setDescription(text)}
+          placeholder={"Enter description"}
+          style={[styles.description]}
+          maxLength={250}
+          value={description}
+        />
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <View style={{ flex: 1, alignItems: "flex-end" }}>
+          <TouchableHighlight
+            style={[styles.button]}
+            disabled={disabled}
+            onPress={() => save()}
+            underlayColor="#000000"
+          >
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableHighlight>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+SaveTaskScreen.navigationOptions = screenProps => ({
+  title: screenProps.navigation.getParam("isEditMode")
+    ? "Edit Task"
+    : "Create Task",
+  headerRight: <View style={{ padding: 6 }}></View>,
+  headerTitleStyle: {
+    textAlign: "center",
+    flexGrow: 1,
+    alignSelf: "center"
+  },
+  headerStyle: {
+    paddingHorizontal: 8
+  }
+});
+
+const styles = StyleSheet.create({
+  button: {
+    alignItems: "center",
+    backgroundColor: "#4d79ff",
+    borderRadius: 8,
+    height: 44,
+    justifyContent: "center",
+    width: 80
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    height: 70,
+    padding: 12
+  },
+  buttonText: {
+    color: "#ffffff"
+  },
+  description: {
+    borderColor: "#ffffff",
+    borderTopWidth: 1,
+    color: "#333333",
+    fontSize: 30,
+    lineHeight: 33,
+    minHeight: 170,
+    padding: 16,
+    paddingTop: 16
+  },
+  flex: {
+    flex: 1
+  },
+  name: {
+    backgroundColor: "#ffffff",
+    fontSize: 20,
+    height: 70,
+    lineHeight: 28,
+    padding: 12
+  }
+});

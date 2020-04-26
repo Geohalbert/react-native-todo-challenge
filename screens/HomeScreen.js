@@ -16,6 +16,8 @@ import TaskItem from "../components/TaskItem";
 
 export default function HomeScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
+
+  // CODE I WAS WORKING ON - MAY NEED LATER
   // const [focusState, setFocusState] = useState(true);
 
   // useEffect(() => {
@@ -34,10 +36,7 @@ export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const dataReducer = useSelector(state => state.dataReducer);
   const { tasks } = dataReducer;
-  // const url =
-  //   "https://my-json-server.typicode.com/geohalbert/todo-server/tasks";
 
-  // gather tasks
   const fetchTasks = () => {
     setIsLoading(true);
     AsyncStorage.getItem("tasks", (err, tasks) => {
@@ -52,13 +51,6 @@ export default function HomeScreen({ navigation }) {
     fetchTasks();
   }, []);
 
-  // useEffect(() => {
-  //   if (isFocused) {
-  //     fetchTasks();
-  //   }
-  // }, [isFocused]);
-
-  // renders tasks
   renderTasks = data => {
     return data.map((task, key) => {
       return (
@@ -66,9 +58,9 @@ export default function HomeScreen({ navigation }) {
           style={styles.task}
           key={key}
           onPress={() =>
-            navigation.navigate("CreateTask", {
-              id: task.id,
-              taskName: task.name
+            navigation.navigate("SaveTask", {
+              task,
+              isEditMode: true
             })
           }
         >
@@ -108,7 +100,7 @@ export default function HomeScreen({ navigation }) {
           title="Add New"
           iconName={"add-icon"}
           onPress={() => {
-            navigation.navigate("CreateTask");
+            navigation.navigate("SaveTask");
           }}
         />
       )}
