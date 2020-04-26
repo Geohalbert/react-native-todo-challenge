@@ -1,32 +1,32 @@
 {
   "tasks": [
     {
-      "completed": "22-04-2020",
+      "completed": true,
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
       "id": 1,
       "name": "first task",
-      "target": "29-04-2020"
+      "target": 1588118400000
     },
     {
-      "completed": "24-04-2020",
+      "completed": true,
       "description": "do eiusmod tempor incididunt ut",
       "id": 2,
       "name": "second task",
-      "target": "21-04-2020"
+      "target": 1586476800000
     },
     {
-      "completed": null,
+      "completed": false,
       "description": "ut aliquip ex ea commodo consequat. Duis aute irure dolor",
       "id": 3,
       "name": "third task",
-      "target": "28-04-2020"
+      "target": 1588204800000
     },
     {
-      "completed": null,
+      "completed": false,
       "description": "fourth description",
       "id": 4,
       "name": "fourth task",
-      "target": "28-04-020"
+      "target": 1588032000000
     }
   ]
 }

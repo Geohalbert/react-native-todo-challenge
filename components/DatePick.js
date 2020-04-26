@@ -53,8 +53,7 @@ export default function DatePick(props) {
           mode={mode}
           is24Hour={true}
           display="default"
-          //   onChange={changeDate}
-          onChange={value => console.log(value)}
+          onChange={changeDate}
         />
       )}
     </View>

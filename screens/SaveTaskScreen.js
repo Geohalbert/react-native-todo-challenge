@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import { CheckBox } from "react-native-elements";
 
 import { useDispatch } from "react-redux";
 import { createTask, updateTask, deleteTask } from "../actions/task.actions";
@@ -33,7 +34,7 @@ export default function SaveTaskScreen({ navigation }) {
   const [description, setDescription] = useState("");
   const [target, setTarget] = useState("");
   const [id, setId] = useState("");
-  const [completed, setCompleted] = useState("");
+  const [completed, setCompleted] = useState(task.completed || false);
 
   setTaskData = task => {
     setId(task.id);
@@ -128,6 +129,15 @@ export default function SaveTaskScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.flex}>
       <View style={styles.flex}>
+        <CheckBox
+          center
+          iconRight
+          title="Completed"
+          checkedIcon="dot-circle-o"
+          uncheckedIcon="circle-o"
+          checked={completed}
+          onPress={() => setCompleted(!completed)}
+        />
         <TextInput
           onChangeText={text => setName(text)}
           placeholder={"Name"}
@@ -145,7 +155,7 @@ export default function SaveTaskScreen({ navigation }) {
         />
         <View style={styles.date}>
           <Text>Target: </Text>
-          <DatePick target={target} onChange={setTarget} />
+          <DatePick date={target} onChange={setTarget} />
         </View>
       </View>
 
