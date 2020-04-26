@@ -2,6 +2,7 @@ import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
 // screens
+import Initializing from "../screens/Initializing";
 import HomeScreen from "../screens/HomeScreen";
 import CreateTaskScreen from "../screens/CreateTaskScreen";
 import ViewTaskScreen from "../screens/ViewTaskScreen";
@@ -46,10 +47,11 @@ const AppStack = createStackNavigator({
 export default createAppContainer(
   createSwitchNavigator(
     {
+      Init: Initializing,
       App: AppStack
     },
     {
-      initialRouteName: "App"
+      initialRouteName: "Init"
     }
   )
 );
