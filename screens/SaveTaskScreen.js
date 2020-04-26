@@ -188,7 +188,13 @@ export default function SaveTaskScreen({ navigation }) {
         />
         <View style={styles.date}>
           <Text>Target: </Text>
-          <DatePick date={target} onChange={setTarget} value={target} />
+          <DatePick
+            date={target}
+            setTarget={setTarget}
+            value={target}
+            target={target}
+            newTarget={toTimestamp(target)}
+          />
         </View>
       </View>
 
