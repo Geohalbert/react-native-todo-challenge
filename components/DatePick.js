@@ -1,56 +1,66 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, Button, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { toTimestring, toTimestamp } from "../utils/functions";
 
-const DatePick = props => {
-  const { target, setTarget, newTarget } = props;
-  const [date, setDate] = useState(new Date(1588204800000));
-  const [isLoading, setIsLoading] = useState(true);
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
+class DatePick extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      date: this.props.target,
+      mode: "date",
+      show: false
+    };
+  }
 
-  const onChange = (event, value) => {
-    setShow(Platform.OS === "ios"); // first state update hides datetimepicker
-    setDate(value);
-    setTarget(value);
-  };
-
-  const showMode = currentMode => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  useEffect(() => {
-    if (isLoading) {
-      // setDate(newTarget);
-      setIsLoading(false);
+  componentDidMount() {
+    if (this.state.loading && this.props.target !== "Invalid Date") {
+      this.setState({ loading: false, date: new Date(this.props.target) });
     }
-  });
+  }
+  render() {
+    const { target, setTarget, title } = this.props;
+    const { show, mode, date, loading } = this.state;
 
-  const showDatepicker = () => {
-    showMode("date");
-  };
-  const title = toTimestring(target);
-  return (
-    <View>
+    const showDatepicker = () => {
+      showMode("date");
+    };
+
+    const onChange = (event, selectedValue) => {
+      const plat = Platform.OS === "ios";
+      this.setState({
+        show: plat,
+        date: selectedValue
+      });
+      setTarget(selectedValue);
+    };
+
+    const showMode = currentMode => {
+      this.setState({ show: true, mode: currentMode });
+    };
+
+    const renderButton = (
       <View>
         <Button onPress={showDatepicker} title={title} />
       </View>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          timeZoneOffsetInMinutes={0}
-          value={date}
-          mode={mode}
-          // mode="default"
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
-    </View>
-  );
-};
+    );
+    return (
+      <View>
+        {!loading && renderButton}
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            timeZoneOffsetInMinutes={0}
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+          />
+        )}
+      </View>
+    );
+  }
+}
 
 export default DatePick;

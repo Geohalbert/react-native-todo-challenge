@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 
-import { toTimestring, toTimestamp } from "../utils/functions";
+import { toTimestring, toTimestamp, formatDate } from "../utils/functions";
 
 import { useDispatch } from "react-redux";
 import { createTask, updateTask, deleteTask } from "../actions/task.actions";
@@ -27,11 +27,12 @@ export default function SaveTaskScreen({ navigation }) {
 
   const isEditMode = navigation.getParam("isEditMode", null);
   const task = navigation.getParam("task", null);
+  const defaultDate = task ? task.target : new Date();
 
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [target, setTarget] = useState("");
+  const [target, setTarget] = useState(defaultDate);
   const [id, setId] = useState("");
   const [completed, setCompleted] = useState(false);
   const [completedAt, setCompletedAt] = useState();
@@ -40,7 +41,7 @@ export default function SaveTaskScreen({ navigation }) {
     setId(task.id);
     setName(task.name);
     setDescription(task.description);
-    setTarget(task.target);
+    setTarget(new Date(task.target));
     setCompleted(task.completed);
     setCompletedAt(task.completedAt);
   };
@@ -53,7 +54,7 @@ export default function SaveTaskScreen({ navigation }) {
       id: isEditMode ? id : newId,
       name: name,
       description: description,
-      target: target,
+      target: new Date(target),
       completed: completed,
       completedAt: completedAt
     };
@@ -189,11 +190,9 @@ export default function SaveTaskScreen({ navigation }) {
         <View style={styles.date}>
           <Text>Target: </Text>
           <DatePick
-            date={target}
             setTarget={setTarget}
-            value={target}
             target={target}
-            newTarget={toTimestamp(target)}
+            title={toTimestring(target)}
           />
         </View>
       </View>
