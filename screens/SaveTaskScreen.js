@@ -225,15 +225,7 @@ SaveTaskScreen.navigationOptions = screenProps => ({
     >
       <Image source={require("../assets/delete.png")} />
     </TouchableOpacity>
-  ),
-  headerTitleStyle: {
-    textAlign: "center",
-    flexGrow: 1,
-    alignSelf: "center"
-  },
-  headerStyle: {
-    paddingHorizontal: 8
-  }
+  )
 });
 
 const styles = StyleSheet.create({
@@ -255,7 +247,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   icon: {
-    marginRight: 10
+    marginRight: 20
   },
   buttonText: {
     color: "#ffffff"

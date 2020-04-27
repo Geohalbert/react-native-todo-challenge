@@ -10,31 +10,33 @@ import SaveTaskScreen from "../screens/SaveTaskScreen";
 const defaultStyle = {
   headerTintColor: "#fff",
   headerStyle: {
-    backgroundColor: "#ccebff"
-  },
-  headerTitleStyle: {
-    textAlign: "center",
-    flexGrow: 1,
-    alignSelf: "center"
+    backgroundColor: "#666666"
   }
 };
 
 // initial app stack
-const AppStack = createStackNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      title: "Tasks",
-      ...defaultStyle
+const AppStack = createStackNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+        title: "Tasks",
+        ...defaultStyle
+      }
+    },
+    SaveTask: {
+      screen: SaveTaskScreen,
+      navigationOptions: {
+        ...defaultStyle
+      }
     }
   },
-  SaveTask: {
-    screen: SaveTaskScreen,
-    navigationOptions: {
-      ...defaultStyle
+  {
+    defaultNavigationOptions: {
+      headerTitleAlign: "center"
     }
   }
-});
+);
 
 // app navigation logic
 export default createAppContainer(
