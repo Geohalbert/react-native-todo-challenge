@@ -7,19 +7,19 @@ class DatePick extends React.Component {
     super(props);
     this.state = {
       loading: true,
-      date: this.props.target,
+      date: this.props.date,
       mode: "date",
       show: false
     };
   }
 
   componentDidMount() {
-    if (this.state.loading && this.props.target !== "Invalid Date") {
-      this.setState({ loading: false, date: new Date(this.props.target) });
+    if (this.state.loading && this.props.date !== "Invalid Date") {
+      this.setState({ loading: false, date: new Date(this.props.date) });
     }
   }
   render() {
-    const { target, setTarget, title } = this.props;
+    const { setTarget } = this.props;
     const { show, mode, date, loading } = this.state;
 
     const showDatepicker = () => {
@@ -28,11 +28,17 @@ class DatePick extends React.Component {
 
     const onChange = (event, selectedValue) => {
       const plat = Platform.OS === "ios";
-      this.setState({
-        show: plat,
-        date: selectedValue
-      });
-      setTarget(selectedValue);
+      if (selectedValue !== undefined) {
+        this.setState({
+          show: plat,
+          date: selectedValue
+        });
+        setTarget(selectedValue);
+      } else {
+        this.setState({
+          show: false
+        });
+      }
     };
 
     const showMode = currentMode => {
@@ -41,7 +47,7 @@ class DatePick extends React.Component {
 
     const renderButton = (
       <View>
-        <Button onPress={showDatepicker} title={title} />
+        <Button onPress={showDatepicker} title="Change Date" />
       </View>
     );
     return (

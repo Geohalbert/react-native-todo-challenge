@@ -1,10 +1,15 @@
+import React from "react";
+import { TouchableOpacity, Image, Keyboard, StyleSheet } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
 
 // screens
 import Initializing from "../screens/Initializing";
 import HomeScreen from "../screens/HomeScreen";
 import SaveTaskScreen from "../screens/SaveTaskScreen";
+
+import CustomDrawer from "../components/CustomDrawer";
 
 // default style
 const defaultStyle = {
@@ -38,15 +43,53 @@ const AppStack = createStackNavigator(
   }
 );
 
+const NewTaskDrawer = createStackNavigator({
+  NewTask: {
+    screen: SaveTaskScreen,
+    navigationOptions: {
+      title: "New Task",
+      ...defaultStyle
+    }
+  }
+});
+
+const DrawerNavigation = createDrawerNavigator(
+  {
+    HomeDrawer: {
+      screen: AppStack,
+      navigationOptions: {
+        drawerLabel: "Tasks"
+      }
+    },
+    NewTaskDrawer: {
+      screen: NewTaskDrawer,
+      navigationOptions: {
+        drawerLabel: "New Task",
+        ...defaultStyle
+      }
+    }
+  },
+  {
+    contentComponent: CustomDrawer
+  }
+);
+
 // app navigation logic
 export default createAppContainer(
   createSwitchNavigator(
     {
       Init: Initializing,
-      App: AppStack
+      App: DrawerNavigation
     },
     {
       initialRouteName: "Init"
     }
   )
 );
+
+const styles = StyleSheet.create({
+  headerButton: {
+    paddingRight: 15,
+    alignItems: "center"
+  }
+});

@@ -1,0 +1,62 @@
+import React from "react";
+import {
+  Image,
+  ImageBackground,
+  Linking,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
+} from "react-native";
+
+import { DrawerItems } from "react-navigation-drawer";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
+import { github, linkedIn, resume } from "../utils/constants";
+import { urlTest } from "../utils/functions";
+
+export default function CustomDrawer(props) {
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ImageBackground
+        style={{
+          height: 240,
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+        source={require("../assets/logo.png")}
+      >
+        {/* <Image
+          source={require("../assets/nav-logo.png")}
+          style={{ height: "80%", width: "80%", resizeMode: "contain" }}
+        /> */}
+      </ImageBackground>
+      <ScrollView>
+        <DrawerItems {...props} />
+        <View style={styles.buttons}>
+          <TouchableOpacity onPress={() => urlTest(github)}>
+            <Text style={styles.label}>Github</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => urlTest(linkedIn)}>
+            <Text style={styles.label}>LinkedIn</Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity onPress={() => urlTest(resume)}>
+            <Text style={styles.label}>My Resume</Text>
+          </TouchableOpacity> */}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  buttons: {
+    marginTop: 10
+  },
+  label: {
+    marginBottom: 30,
+    marginLeft: 17,
+    fontWeight: "bold"
+  }
+});

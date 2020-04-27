@@ -9,9 +9,11 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
-  View
+  View,
+  Keyboard
 } from "react-native";
 import { CheckBox } from "react-native-elements";
+import { DrawerActions } from "react-navigation-drawer";
 
 import { toTimestring, toTimestamp, formatDate } from "../utils/functions";
 
@@ -158,6 +160,8 @@ export default function SaveTaskScreen({ navigation }) {
   }, []);
 
   const disabled = name && description && !isLoading ? false : true;
+  const timeStr = toTimestring(target);
+  const comText = completed ? "Mark as incomplete" : "Mark as completed";
   return (
     <SafeAreaView style={styles.flex}>
       <View style={styles.flex}>
@@ -165,7 +169,7 @@ export default function SaveTaskScreen({ navigation }) {
           <CheckBox
             center
             iconRight
-            title="Completed"
+            title={comText}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             checked={completed}
@@ -188,12 +192,8 @@ export default function SaveTaskScreen({ navigation }) {
           value={description}
         />
         <View style={styles.date}>
-          <Text>Target: </Text>
-          <DatePick
-            setTarget={setTarget}
-            target={target}
-            title={toTimestring(target)}
-          />
+          <Text>Target: {timeStr}</Text>
+          <DatePick setTarget={setTarget} date={target} />
         </View>
       </View>
 
@@ -225,7 +225,34 @@ SaveTaskScreen.navigationOptions = screenProps => ({
     >
       <Image source={require("../assets/delete.png")} />
     </TouchableOpacity>
-  )
+  ),
+  headerLeft: () =>
+    screenProps.navigation.getParam("fromHome") !== undefined ? (
+      <TouchableOpacity
+        onPress={() => screenProps.navigation.navigate("Home")}
+        style={styles.headerButton}
+      >
+        <Text style={styles.headerLeftText}>BACK</Text>
+      </TouchableOpacity>
+    ) : (
+      <TouchableOpacity
+        onPress={() => {
+          screenProps.navigation.dispatch(DrawerActions.openDrawer());
+          Keyboard.dismiss();
+        }}
+        style={styles.headerButton}
+      >
+        <Image
+          style={{
+            width: 30,
+            height: 30,
+            resizeMode: "contain",
+            marginLeft: 10
+          }}
+          source={require("../assets/menu_2.png")}
+        />
+      </TouchableOpacity>
+    )
 });
 
 const styles = StyleSheet.create({
@@ -241,6 +268,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 70,
     padding: 12
+  },
+  headerButton: {
+    paddingRight: 15,
+    alignItems: "center",
+    flexDirection: "row"
   },
   date: {
     flexDirection: "row",
@@ -271,5 +303,10 @@ const styles = StyleSheet.create({
     height: 70,
     lineHeight: 28,
     padding: 12
+  },
+  headerLeftText: {
+    color: "white",
+    fontWeight: "bold",
+    paddingLeft: 15
   }
 });

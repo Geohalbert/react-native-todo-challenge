@@ -3,33 +3,33 @@
     {
       "completed": true,
       "completedAt": 1588118400000,
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+      "description": "Need eggs and sparkling water",
       "id": 1,
-      "name": "first task",
+      "name": "Get groceries",
       "target": 1588118400000
     },
     {
       "completed": true,
       "completedAt": 1586476800000,
-      "description": "do eiusmod tempor incididunt ut",
+      "description": "Don't forget to check your pockets!",
       "id": 2,
-      "name": "second task",
+      "name": "Do laundry",
       "target": 1586476800000
     },
     {
       "completed": false,
       "completedAt": null,
-      "description": "ut aliquip ex ea commodo consequat. Duis aute irure dolor",
+      "description": "3 months after quarantine",
       "id": 3,
-      "name": "third task",
+      "name": "Do taxes",
       "target": 1588204800000
     },
     {
       "completed": false,
       "completedAt": null,
-      "description": "fourth description",
+      "description": "Don't let her walk YOU",
       "id": 4,
-      "name": "fourth task",
+      "name": "Walk the dog",
       "target": 1588032000000
     }
   ]

@@ -3,16 +3,22 @@ import {
   AsyncStorage,
   Button,
   SafeAreaView,
+  Keyboard,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Image,
+  TouchableHighlight
 } from "react-native";
 import { getTasks } from "../actions/task.actions";
 
+import { DrawerActions } from "react-navigation-drawer";
+
 import { useDispatch, useSelector } from "react-redux";
 import TaskItem from "../components/TaskItem";
+// import HamburgerIcon from "../components/HamburgerIcon";
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -42,12 +48,14 @@ export default function HomeScreen({ navigation }) {
           key={key}
           onPress={() =>
             navigation.navigate("SaveTask", {
+              fromHome: true,
               task,
               isEditMode: true
             })
           }
         >
           <TaskItem
+            task={task}
             completed={task.completed}
             completedAt={task.completedAt}
             description={task.description}
@@ -80,18 +88,54 @@ export default function HomeScreen({ navigation }) {
       {isLoading && showLoading()}
       {tasks && renderList(tasks)}
       {!isLoading && (
-        <Button
-          title="Add New"
-          iconName={"add-icon"}
+        <TouchableHighlight
+          style={[styles.button]}
           onPress={() => {
             navigation.navigate("SaveTask");
           }}
-        />
+          underlayColor="#000000"
+        >
+          <Text style={styles.buttonText}>Create new task</Text>
+        </TouchableHighlight>
       )}
     </SafeAreaView>
   );
 }
+
+HomeScreen.navigationOptions = screenProps => ({
+  headerRight: () => <View style={{ padding: 6 }}></View>,
+  headerLeft: () => (
+    <TouchableOpacity
+      onPress={() => {
+        screenProps.navigation.dispatch(DrawerActions.openDrawer());
+        Keyboard.dismiss();
+      }}
+      style={styles.headerButton}
+    >
+      <Image
+        style={{
+          width: 30,
+          height: 30,
+          resizeMode: "contain",
+          marginLeft: 10
+        }}
+        source={require("../assets/menu_2.png")}
+      />
+    </TouchableOpacity>
+  )
+});
 const styles = StyleSheet.create({
+  button: {
+    alignItems: "center",
+    backgroundColor: "#4d79ff",
+    borderRadius: 8,
+    height: 50,
+    justifyContent: "center",
+    width: "50%"
+  },
+  buttonText: {
+    color: "#ffffff"
+  },
   container: {
     flexDirection: "column",
     flexWrap: "wrap",

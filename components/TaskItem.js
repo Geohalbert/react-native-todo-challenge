@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { toTimestring } from "../utils/functions";
+import ShareIcon from "./ShareIcon";
 
 export default function TaskItem(props) {
-  const { completed, completedAt, description, id, name, target } = props;
-
+  const { completed, completedAt, description, id, name, target, task } = props;
   // these will have touchable features
   const status = completed
     ? `completed on ${toTimestring(completedAt)}`
@@ -13,6 +13,7 @@ export default function TaskItem(props) {
     <View style={styles.container}>
       <View style={styles.cardHeader}>
         <Text style={styles.headerText}>{name}</Text>
+        <ShareIcon task={task} />
       </View>
       <View style={styles.cardBody}>
         <Text style={styles.text}>Description: {description}</Text>
