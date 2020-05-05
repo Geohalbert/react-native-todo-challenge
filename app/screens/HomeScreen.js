@@ -12,7 +12,7 @@ import {
   Image,
   TouchableHighlight
 } from "react-native";
-import { getTasks } from "../actions/task.actions";
+import { getTasks } from "../redux/actions/task.actions";
 
 import { DrawerActions } from "react-navigation-drawer";
 

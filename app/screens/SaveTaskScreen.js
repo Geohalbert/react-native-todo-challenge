@@ -18,7 +18,11 @@ import { DrawerActions } from "react-navigation-drawer";
 import { toTimestring, toTimestamp, formatDate } from "../utils/functions";
 
 import { useDispatch } from "react-redux";
-import { createTask, updateTask, deleteTask } from "../actions/task.actions";
+import {
+  createTask,
+  updateTask,
+  deleteTask
+} from "../redux/actions/task.actions";
 
 import DatePick from "../components/DatePick";
 

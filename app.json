@@ -9,11 +9,14 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./app/assets/icon.png",
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./app/assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#04b1cb"
+    },"android": {
+      "package": "com.rntodochallenge",
+      "versionCode": 1
     },
     "updates": {
       "fallbackToCacheTimeout": 0
