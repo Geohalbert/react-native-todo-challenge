@@ -3,7 +3,7 @@ import { createAppContainer } from "react-navigation";
 import AppNavigator from "./app/navigation/AppNavigator";
 import { Provider } from "react-redux";
 
-import store from "./app/store/task.store"; //Import the store
+import store from "./app/store/task.store";
 
 export default function App() {
   const AppContainer = createAppContainer(AppNavigator);

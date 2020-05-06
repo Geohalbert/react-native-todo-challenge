@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   AsyncStorage,
-  Button,
   SafeAreaView,
   Keyboard,
   ScrollView,
@@ -18,27 +17,26 @@ import { DrawerActions } from "react-navigation-drawer";
 
 import { useDispatch, useSelector } from "react-redux";
 import TaskItem from "../components/TaskItem";
-// import HamburgerIcon from "../components/HamburgerIcon";
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const dataReducer = useSelector(state => state.dataReducer);
   const { tasks } = dataReducer;
+  // hooks
   const [isLoading, setIsLoading] = useState(false);
-
-  const fetchTasks = () => {
-    setIsLoading(true);
-    AsyncStorage.getItem("tasks", (err, tasks) => {
-      if (err) console.log(err);
-      else if (tasks !== null) dispatch(getTasks(JSON.parse(tasks)));
-
-      setIsLoading(false);
-    });
-  };
 
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  fetchTasks = () => {
+    setIsLoading(true);
+    AsyncStorage.getItem("tasks", (err, tasks) => {
+      if (err) console.log(err);
+      else if (tasks !== null) dispatch(getTasks(JSON.parse(tasks)));
+      setIsLoading(false);
+    });
+  };
 
   renderTasks = data => {
     return data.map((task, key) => {
@@ -72,15 +70,6 @@ export default function HomeScreen({ navigation }) {
   // searching/sorting
   renderList = data => {
     return <ScrollView>{renderTasks(data)}</ScrollView>;
-  };
-
-  // animate later
-  showLoading = () => {
-    return (
-      <View style={styles.task}>
-        <Text style={styles.text}>Please wait while data loads</Text>
-      </View>
-    );
   };
 
   return (

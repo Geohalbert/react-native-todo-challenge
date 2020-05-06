@@ -26,12 +26,7 @@ export default function CustomDrawer(props) {
           justifyContent: "center"
         }}
         source={require("../assets/logo.png")}
-      >
-        {/* <Image
-          source={require("../assets/nav-logo.png")}
-          style={{ height: "80%", width: "80%", resizeMode: "contain" }}
-        /> */}
-      </ImageBackground>
+      ></ImageBackground>
       <ScrollView>
         <DrawerItems {...props} />
         <View style={styles.buttons}>

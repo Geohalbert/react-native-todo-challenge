@@ -1,7 +1,6 @@
-import React from "react";
-import { TouchableOpacity, Image, Keyboard, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
+import { createDrawerNavigator } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
 
 // screens
@@ -43,6 +42,7 @@ const AppStack = createStackNavigator(
   }
 );
 
+// drawer for hamburger menu
 const NewTaskDrawer = createStackNavigator({
   NewTask: {
     screen: SaveTaskScreen,
@@ -53,6 +53,7 @@ const NewTaskDrawer = createStackNavigator({
   }
 });
 
+// hamburger menu navigation
 const DrawerNavigation = createDrawerNavigator(
   {
     HomeDrawer: {

@@ -14,9 +14,7 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { DrawerActions } from "react-navigation-drawer";
-
 import { toTimestring, toTimestamp, formatDate } from "../utils/functions";
-
 import { useDispatch } from "react-redux";
 import {
   createTask,
@@ -26,15 +24,17 @@ import {
 
 import DatePick from "../components/DatePick";
 
-import axios from "axios";
-
 export default function SaveTaskScreen({ navigation }) {
   const dispatch = useDispatch();
-
+  // nav params
   const isEditMode = navigation.getParam("isEditMode", null);
   const task = navigation.getParam("task", null);
+  // misc consts
   const defaultDate = task ? task.target : new Date();
-
+  const disabled = name && description && !isLoading ? false : true;
+  const timeStr = toTimestring(target);
+  const comText = completed ? "Mark as incomplete" : "Mark as completed";
+  // hooks
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -42,6 +42,13 @@ export default function SaveTaskScreen({ navigation }) {
   const [id, setId] = useState("");
   const [completed, setCompleted] = useState(false);
   const [completedAt, setCompletedAt] = useState();
+
+  useEffect(() => {
+    // if isEditMode, prepopulate task data
+    if (isEditMode && task) {
+      setTaskData(task);
+    }
+  }, []);
 
   setTaskData = task => {
     setId(task.id);
@@ -52,6 +59,7 @@ export default function SaveTaskScreen({ navigation }) {
     setCompletedAt(task.completedAt);
   };
 
+  // events
   save = () => {
     setIsLoading(true);
     const newId = Math.floor(Math.random() * Math.floor(10000000));
@@ -65,7 +73,6 @@ export default function SaveTaskScreen({ navigation }) {
       completedAt: completedAt
     };
 
-    const saveAction = isEditMode ? "modification" : "creation";
     const successMessage = isEditMode
       ? "Task has been updated"
       : "Task has been created";
@@ -78,7 +85,7 @@ export default function SaveTaskScreen({ navigation }) {
         if (!isEditMode) {
           tasks.push(taskObj);
         } else {
-          ///if the task is in the array, replace the task by index
+          //if the task is in the array, replace the task by index
           const index = tasks.findIndex(obj => obj.id === taskObj.id);
           if (index !== -1) tasks[index] = taskObj;
         }
@@ -118,6 +125,26 @@ export default function SaveTaskScreen({ navigation }) {
     });
   };
 
+  completeTask = completed => {
+    if (!completed) {
+      setCompletedAt(toTimestamp(new Date()));
+      setCompleted(true);
+    } else {
+      completeTaskAlert();
+    }
+  };
+
+  // alerts for corresponding events
+  deleteTaskAlert = () => {
+    Alert.alert("Delete Task", "Are you sure you want to delete this task?", [
+      { text: "Delete", onPress: () => removeTask(id) },
+      {
+        text: "Cancel",
+        style: "cancel"
+      }
+    ]);
+  };
+
   completeTaskAlert = () => {
     Alert.alert(
       "Complete Task",
@@ -138,34 +165,6 @@ export default function SaveTaskScreen({ navigation }) {
     );
   };
 
-  completeTask = completed => {
-    if (!completed) {
-      setCompletedAt(toTimestamp(new Date()));
-      setCompleted(true);
-    } else {
-      completeTaskAlert();
-    }
-  };
-
-  deleteTaskAlert = () => {
-    Alert.alert("Delete Task", "Are you sure you want to delete this task?", [
-      { text: "Delete", onPress: () => removeTask(id) },
-      {
-        text: "Cancel",
-        style: "cancel"
-      }
-    ]);
-  };
-  useEffect(() => {
-    // if isEditMode, prepopulate task data
-    if (isEditMode && task) {
-      setTaskData(task);
-    }
-  }, []);
-
-  const disabled = name && description && !isLoading ? false : true;
-  const timeStr = toTimestring(target);
-  const comText = completed ? "Mark as incomplete" : "Mark as completed";
   return (
     <SafeAreaView style={styles.flex}>
       <View style={styles.flex}>

@@ -4,6 +4,7 @@ import { AppLoading } from "expo";
 
 import localData from "../utils/db";
 
+// this "screen" basically loads the data and then navigates to the app
 export default function Initializing(props) {
   useEffect(() => checkLocalData(), []);
 
