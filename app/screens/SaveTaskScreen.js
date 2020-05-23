@@ -5,23 +5,22 @@ import {
   Button,
   Dimensions,
   Image,
+  Keyboard,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
-  View,
-  Keyboard
+  View
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { DrawerActions } from "react-navigation-drawer";
-import { toTimestring, toTimestamp, formatDate } from "../utils/functions";
+import { toTimestring, toTimestamp } from "../utils/functions";
 import { useDispatch } from "react-redux";
 import {
   createTask,
-  updateTask,
-  deleteTask
+  deleteTask,
+  updateTask
 } from "../redux/actions/task.actions";
 import DatePick from "../components/DatePick";
 import FooterButton from "../components/FooterButton";
@@ -48,16 +47,6 @@ export default function SaveTaskScreen({ navigation }) {
   const [completedAt, setCompletedAt] = useState();
   const [show, setShow] = useState(false);
 
-  const stylesArr = [styles.button];
-
-  // if (position === "right") {
-  //   stylesArr.push(styles.right);
-  // } else if (position === "left") {
-  //   stylesArr.push(styles.left);
-  // } else if (position === "middle") {
-  //   stylesArr.push(styles.left);
-  //   stylesArr.push(styles.right);
-  // }
   // useEffect(() => {
   //   // if isEditMode, prepopulate task data
   //   loadScreen = () => {
@@ -246,11 +235,7 @@ export default function SaveTaskScreen({ navigation }) {
         {show && (
           <DatePick setTarget={setTarget} date={target} setShow={setShow} />
         )}
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <View style={{ flex: 1, alignItems: "center" }}></View>
-        {isEditMode && (
+        {!show && isEditMode && (
           <CheckBox
             center
             iconRight
@@ -259,8 +244,6 @@ export default function SaveTaskScreen({ navigation }) {
             uncheckedIcon="add"
             checkedColor="green"
             title={comText}
-            // checkedIcon="dot-circle-o"
-            // uncheckedIcon="circle-o"
             checked={completed}
             onPress={() => completeTask(completed)}
           />
@@ -325,28 +308,18 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    // justifyContent: "space-around",
     height: 70,
     padding: 12
   },
-  headerButton: {
-    paddingRight: 15,
-    alignItems: "center",
-    flexDirection: "row"
-  },
-  date: {
-    flexDirection: "row",
-    alignItems: "center"
-  },
-  icon: {
-    marginRight: 20
-  },
-
   buttonText: {
     color: "#ffffff",
     fontSize: 14,
     fontWeight: "bold",
     paddingHorizontal: 2
+  },
+  date: {
+    alignItems: "center",
+    flexDirection: "row"
   },
   description: {
     borderColor: "#ffffff",
@@ -361,28 +334,34 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1
   },
-  name: {
-    backgroundColor: "#ffffff",
-    fontSize: 20,
-    height: 70,
-    lineHeight: 28,
-    padding: 12
+  footer: {
+    backgroundColor: "white",
+    borderTopColor: "grey",
+    borderTopWidth: 2,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    justifyContent: "center",
+    paddingVertical: 10,
+    width: "100%"
+  },
+  headerButton: {
+    alignItems: "center",
+    flexDirection: "row",
+    paddingRight: 15
   },
   headerLeftText: {
     color: "white",
     fontWeight: "bold",
     paddingLeft: 15
   },
-  footer: {
-    flexDirection: "row",
-    paddingVertical: 10,
-    // paddingBottom: 40,
-    backgroundColor: "white",
-
-    justifyContent: "space-between",
-    width: "100%",
-    justifyContent: "center",
-    borderTopColor: "grey",
-    borderTopWidth: 2
+  icon: {
+    marginRight: 20
+  },
+  name: {
+    backgroundColor: "#ffffff",
+    fontSize: 20,
+    height: 70,
+    lineHeight: 28,
+    padding: 12
   }
 });
