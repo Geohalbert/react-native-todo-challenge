@@ -16,6 +16,8 @@ export default function FooterButton(props) {
     title,
     onPress,
     isEdit,
+    isCancel,
+    isTwo,
     style,
     iconName,
     children,
@@ -23,28 +25,37 @@ export default function FooterButton(props) {
     ...rest
   } = props;
 
-  const stylesArr = [styles.button];
+  const buttonStyle = [styles.button];
+  const textStyle = [styles.buttonText];
   const divider = isEdit ? 3 : 2.5;
 
   if (isEdit) {
-    stylesArr.push(styles.expanded);
-  } else {
-    stylesArr.push(styles.shorted);
+    buttonStyle.push(styles.expanded);
   }
+  if (isTwo) {
+    buttonStyle.push(styles.isTwo);
+  }
+  if (isCancel) {
+    buttonStyle.push(styles.secondary);
+    textStyle.push(styles.secondaryText);
+  } else {
+    buttonStyle.push(styles.shorted);
+  }
+
   if (Platform.OS === "android") {
     const { onPress, iconName, children, title, ...rest } = props;
     return (
-      <TouchableOpacity style={stylesArr} onPress={onPress}>
+      <TouchableOpacity style={buttonStyle} onPress={onPress}>
         {children}
-        <Text style={styles.buttonText}>{title}</Text>
+        <Text style={textStyle}>{title}</Text>
       </TouchableOpacity>
     );
   } else {
     return (
-      <TouchableOpacity style={stylesArr} onPress={onPress}>
+      <TouchableOpacity style={buttonStyle} onPress={onPress}>
         {children}
 
-        <Text style={styles.buttonText}>{title}</Text>
+        <Text style={textStyle}>{title}</Text>
       </TouchableOpacity>
     );
   }
@@ -68,6 +79,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center"
   },
+  secondaryText: {
+    color: "grey"
+  },
+  secondary: {
+    backgroundColor: "#ffffff",
+    borderColor: "grey"
+  },
   expanded: {
     minWidth: width / 2.5
   },
@@ -84,5 +102,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0
   },
-  left: { borderTopRightRadius: 0, borderBottomRightRadius: 0 }
+  left: { borderTopRightRadius: 0, borderBottomRightRadius: 0 },
+  isTwo: {
+    minWidth: width / 2
+  }
 });

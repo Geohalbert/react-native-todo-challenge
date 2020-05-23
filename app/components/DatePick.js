@@ -52,11 +52,15 @@ class DatePick extends React.Component {
 
     const setDate = async () => {
       await setTarget(date);
-      setShow(false);
       this.setState({
         loading: true,
         show: false
       });
+    };
+
+    const submit = async () => {
+      await setDate;
+      setShow(false);
     };
 
     const onCancel = () => {
@@ -69,8 +73,8 @@ class DatePick extends React.Component {
     };
     const renderButton = (
       <View style={styles.buttonContainer}>
-        <FooterButton isCancel onPress={onCancel} title="Cancel" />
-        <FooterButton isSubmit onPress={setDate} title="Submit" />
+        <FooterButton isCancel isTwo onPress={onCancel} title="Cancel" />
+        <FooterButton isSubmit isTwo onPress={submit} title="Submit" />
       </View>
     );
 
@@ -111,6 +115,12 @@ class DatePick extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    backgroundColor: Platform.OS !== "ios" ? "#00000066" : "transparent",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between"
+  },
   buttonText: {
     color: "#ffffff",
     fontSize: 14,
