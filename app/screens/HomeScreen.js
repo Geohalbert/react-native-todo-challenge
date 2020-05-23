@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   AsyncStorage,
+  Button,
   SafeAreaView,
   Keyboard,
   ScrollView,
@@ -72,13 +73,66 @@ export default function HomeScreen({ navigation }) {
     return <ScrollView>{renderTasks(data)}</ScrollView>;
   };
 
+  const footer = (
+    <View style={styles.footer}>
+      <Button
+        style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+        // onPress={() => {
+        //   navigation.navigate("WaterTest", {
+        //     customerId: navigation.getParam("customerId"),
+        //     setIsFocused: setIsFocused
+        //   });
+        //   setIsFocused(false);
+        // }}
+      >
+        {/* <Image
+          style={styles.icon}
+          source={require("../assets/test-icon.png")}
+        /> */}
+        <Text style={styles.buttonText}>Test</Text>
+      </Button>
+      <Button
+        // onPress={() => {
+        //   navigation.navigate("AddPhotoModal", {
+        //     customerId: navigation.getParam("customerId"),
+        //     setIsFocused: setIsFocused
+        //   });
+        //   setIsFocused(false);
+        // }}
+        style={{ borderRadius: 0, marginHorizontal: 2 }}
+      >
+        {/* <Image
+          style={styles.icon}
+          source={require("../assets/photo-icon.png")}
+        /> */}
+        <Text style={styles.buttonText}>Photo</Text>
+      </Button>
+      <Button
+        // onPress={() => {
+        //   navigation.navigate("AddNoteModal", {
+        //     customerId: navigation.getParam("customerId"),
+        //     setIsFocused: setIsFocused
+        //   });
+        //   setIsFocused(false);
+        // }}
+        style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+      >
+        {/* <Image
+          style={styles.icon}
+          source={require("../assets/note-icon.png")}
+        /> */}
+        <Text style={styles.buttonText}>Note</Text>
+      </Button>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      {isLoading && showLoading()}
+      {/* {isLoading && showLoading()} */}
       {tasks && renderList(tasks)}
       {!isLoading && (
         <TouchableHighlight
-          style={[styles.button]}
+          style={styles.button}
           onPress={() => {
             navigation.navigate("SaveTask");
           }}

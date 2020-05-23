@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import {
   Alert,
   AsyncStorage,
+  Button,
+  Dimensions,
   Image,
   SafeAreaView,
   StyleSheet,
@@ -21,9 +23,10 @@ import {
   updateTask,
   deleteTask
 } from "../redux/actions/task.actions";
-
 import DatePick from "../components/DatePick";
+import FooterButton from "../components/FooterButton";
 
+var width = Dimensions.get("window").width; //full width
 export default function SaveTaskScreen({ navigation }) {
   const dispatch = useDispatch();
   // nav params
@@ -31,37 +34,72 @@ export default function SaveTaskScreen({ navigation }) {
   const task = navigation.getParam("task", null);
   // misc consts
   const defaultDate = task ? task.target : new Date();
-  const disabled = name && description && !isLoading ? false : true;
-  const timeStr = toTimestring(target);
-  const comText = completed ? "Mark as incomplete" : "Mark as completed";
+  const disabled = name && description && !isSaving ? false : true;
+
+  const comText = completed ? "Mark incomplete" : "Mark complete";
   // hooks
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [target, setTarget] = useState(defaultDate);
   const [id, setId] = useState("");
   const [completed, setCompleted] = useState(false);
   const [completedAt, setCompletedAt] = useState();
+  const [show, setShow] = useState(false);
+
+  const stylesArr = [styles.button];
+
+  // if (position === "right") {
+  //   stylesArr.push(styles.right);
+  // } else if (position === "left") {
+  //   stylesArr.push(styles.left);
+  // } else if (position === "middle") {
+  //   stylesArr.push(styles.left);
+  //   stylesArr.push(styles.right);
+  // }
+  // useEffect(() => {
+  //   // if isEditMode, prepopulate task data
+  //   loadScreen = () => {
+  //     if (isLoading) {
+  //       isEditMode && task ? populateData() : setIsLoading(false);
+  //     }
+  //   };
+  // }, [navigation]);
 
   useEffect(() => {
     // if isEditMode, prepopulate task data
-    if (isEditMode && task) {
-      setTaskData(task);
-    }
+    isEditMode && task ? setTaskData(task) : setIsLoading(false);
   }, []);
 
   setTaskData = task => {
     setId(task.id);
     setName(task.name);
     setDescription(task.description);
-    setTarget(new Date(task.target));
+    setTarget(task.target);
     setCompleted(task.completed);
     setCompletedAt(task.completedAt);
   };
 
+  populateData = async task => {
+    await setTaskData(task);
+    setIsLoading(false);
+  };
+
+  displayTarget = target => {
+    console.log(`target: ${target}`);
+    const test = toTimestring(target);
+    console.log(`toTimestring: ${test}`);
+    return (
+      <View style={styles.date}>
+        <Text>Target: {test}</Text>
+      </View>
+    );
+  };
+
   // events
   save = () => {
-    setIsLoading(true);
+    setIsSaving(true);
     const newId = Math.floor(Math.random() * Math.floor(10000000));
 
     let taskObj = {
@@ -165,20 +203,28 @@ export default function SaveTaskScreen({ navigation }) {
     );
   };
 
+  const footer = (
+    <View style={styles.footer}>
+      {isEditMode && (
+        <FooterButton
+          onPress={() => completeTask(completed)}
+          position="middle"
+          title={comText}
+          isEdit={isEditMode}
+        />
+      )}
+      <FooterButton
+        onPress={save}
+        isEdit={isEditMode}
+        position="right"
+        title="Save"
+      />
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.flex}>
       <View style={styles.flex}>
-        {isEditMode && (
-          <CheckBox
-            center
-            iconRight
-            title={comText}
-            checkedIcon="dot-circle-o"
-            uncheckedIcon="circle-o"
-            checked={completed}
-            onPress={() => completeTask(completed)}
-          />
-        )}
         <TextInput
           onChangeText={text => setName(text)}
           placeholder={"Name"}
@@ -194,24 +240,32 @@ export default function SaveTaskScreen({ navigation }) {
           maxLength={250}
           value={description}
         />
-        <View style={styles.date}>
-          <Text>Target: {timeStr}</Text>
-          <DatePick setTarget={setTarget} date={target} />
-        </View>
+        {!isLoading && displayTarget(target)}
+
+        <Button onPress={() => setShow(!show)} title="show picker" />
+        {show && <DatePick setTarget={setTarget} date={target} />}
       </View>
 
       <View style={styles.buttonContainer}>
-        <View style={{ flex: 1, alignItems: "flex-end" }}>
-          <TouchableHighlight
-            style={[styles.button]}
-            disabled={disabled}
-            onPress={() => save()}
-            underlayColor="#000000"
-          >
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableHighlight>
-        </View>
+        <View style={{ flex: 1, alignItems: "center" }}></View>
+        {isEditMode && (
+          <CheckBox
+            center
+            iconRight
+            iconType="material"
+            checkedIcon="clear"
+            uncheckedIcon="add"
+            checkedColor="green"
+            title={comText}
+            // checkedIcon="dot-circle-o"
+            // uncheckedIcon="circle-o"
+            checked={completed}
+            onPress={() => completeTask(completed)}
+          />
+        )}
       </View>
+
+      {!isLoading && footer}
     </SafeAreaView>
   );
 }
@@ -269,6 +323,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
+    // justifyContent: "space-around",
     height: 70,
     padding: 12
   },
@@ -284,8 +339,12 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 20
   },
+
   buttonText: {
-    color: "#ffffff"
+    color: "#ffffff",
+    fontSize: 14,
+    fontWeight: "bold",
+    paddingHorizontal: 2
   },
   description: {
     borderColor: "#ffffff",
@@ -311,5 +370,17 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     paddingLeft: 15
+  },
+  footer: {
+    flexDirection: "row",
+    paddingVertical: 10,
+    // paddingBottom: 40,
+    backgroundColor: "white",
+
+    justifyContent: "space-between",
+    width: "100%",
+    justifyContent: "center",
+    borderTopColor: "grey",
+    borderTopWidth: 2
   }
 });

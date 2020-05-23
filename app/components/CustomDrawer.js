@@ -25,7 +25,7 @@ export default function CustomDrawer(props) {
           alignItems: "center",
           justifyContent: "center"
         }}
-        source={require("../assets/logo.png")}
+        source={require("../assets/your-logo.png")}
       ></ImageBackground>
       <ScrollView>
         <DrawerItems {...props} />

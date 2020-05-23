@@ -11,7 +11,7 @@
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "splash": {
-      "image": "./app/assets/logo.png",
+      "image": "./app/assets/your-logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#04b1cb"
     },"android": {
