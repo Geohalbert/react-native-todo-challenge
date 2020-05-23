@@ -243,7 +243,9 @@ export default function SaveTaskScreen({ navigation }) {
         {!isLoading && displayTarget(target)}
 
         <Button onPress={() => setShow(!show)} title="show picker" />
-        {show && <DatePick setTarget={setTarget} date={target} />}
+        {show && (
+          <DatePick setTarget={setTarget} date={target} setShow={setShow} />
+        )}
       </View>
 
       <View style={styles.buttonContainer}>

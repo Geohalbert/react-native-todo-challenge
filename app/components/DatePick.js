@@ -32,12 +32,8 @@ class DatePick extends React.Component {
     }
   }
   render() {
-    const { setTarget, isEdit } = this.props;
+    const { setTarget, setShow, isEdit } = this.props;
     const { show, mode, date, loading } = this.state;
-
-    const showDatepicker = () => {
-      showMode("date");
-    };
 
     onChange = (event, selectedValue) => {
       const plat = Platform.OS === "ios";
@@ -56,14 +52,16 @@ class DatePick extends React.Component {
 
     const setDate = async () => {
       await setTarget(date);
+      setShow(false);
       this.setState({
-        // loading: true,
+        loading: true,
         show: false
       });
     };
 
     const onCancel = () => {
-      this.setState({ show: false });
+      setShow(false);
+      this.setState({ loading: true, show: false });
     };
 
     const showMode = currentMode => {
@@ -80,26 +78,10 @@ class DatePick extends React.Component {
       setTarget(date);
       this.setState({ show: false });
     };
-    //   // <TouchableOpacity style={stylesArr} onPress={showDatepicker}>
-    //   //   <Text style={styles.buttonText}>Change Date</Text>
-    //   // </TouchableOpacity>
-    //   // <View style={stylesArr}>
-    //   //   <Button onPress={showDatepicker} title="Change Date" />
-    //   // </View>
-    // );
+
     return (
       <View style={styles.container}>
-        {!loading && renderButton}
-        {Platform.OS === "ios" && show && (
-          <View style={styles.header}>
-            <TouchableOpacity onPress={setDate}>
-              <Text>Done</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onCancel}>
-              <Text>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        {!loading && Platform.OS === "ios" && show && renderButton}
         {show && (
           <DateTimePicker
             date={date}
@@ -113,47 +95,16 @@ class DatePick extends React.Component {
                   show: plat,
                   date: d
                 });
-                // setTarget(d);
               } else {
                 this.setState({
                   show: false
                 });
               }
             }}
-            // onChange={d => {
-            //   const plat = Platform.OS === "ios";
-            //   if (d !== undefined) {
-            //     this.setState({
-            //       show: plat,
-            //       date: Date(d)
-            //     });
-            //     // setTarget(d);
-            //   } else {
-            //     this.setState({
-            //       show: false
-            //     });
-            //   }
-            // }}
             onClose={onClose}
             style={{ backgroundColor: "white" }}
           />
         )}
-
-        {/* <DateTimePicker
-          value={this.state.date}
-          mode="date"
-          onClose={d => {
-            if (d && Platform.OS !== "ios") {
-              setTarget(d);
-              this.setState({ show: false, date: d });
-            } else {
-              this.setState({ show: false });
-            }
-          }}
-          onClose={d => {
-            this.setState({ date: d });
-          }}
-        /> */}
       </View>
     );
   }
@@ -164,7 +115,6 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 14,
     fontWeight: "bold"
-    // paddingHorizontal: 3
   },
   container: {
     backgroundColor: Platform.OS === "ios" ? "#00000066" : "transparent",
