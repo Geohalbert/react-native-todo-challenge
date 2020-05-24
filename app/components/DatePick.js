@@ -23,28 +23,34 @@ class DatePick extends React.Component {
       });
     }
   }
+
   render() {
     const { setShow, setTarget } = this.props;
     const { date, loading, show } = this.state;
 
-    onChange = (event, selectedValue) => {
-      const plat = Platform.OS === "ios";
-      if (selectedValue !== undefined) {
+    const onChange = (e, d) => {
+      const ios = Platform.OS === "ios";
+      if (d !== undefined) {
         this.setState({
-          date: selectedValue,
-          show: plat
+          date: d,
+          show: ios
         });
-        setTarget(selectedValue);
+        if (!ios) {
+          setTarget(d);
+          setShow(false);
+        }
       } else {
         this.setState({
           show: false
         });
+        if (!ios) {
+          setShow(false);
+        }
       }
     };
 
     const setDate = async () => {
       await setTarget(date);
-
       this.setState({
         loading: true,
         show: false
@@ -64,12 +70,6 @@ class DatePick extends React.Component {
       });
     };
 
-    const showMode = currentMode => {
-      this.setState({
-        mode: currentMode,
-        show: true
-      });
-    };
     const renderButton = (
       <View style={styles.buttonContainer}>
         <FooterButton isCancel isTwo onPress={onCancel} title="Cancel" />
@@ -91,19 +91,7 @@ class DatePick extends React.Component {
             value={new Date(date)}
             mode="date"
             display="default"
-            onChange={(e, d) => {
-              const plat = Platform.OS === "ios";
-              if (d !== undefined) {
-                this.setState({
-                  date: d,
-                  show: plat
-                });
-              } else {
-                this.setState({
-                  show: false
-                });
-              }
-            }}
+            onChange={onChange}
             onClose={onClose}
             style={{ backgroundColor: "white" }}
           />

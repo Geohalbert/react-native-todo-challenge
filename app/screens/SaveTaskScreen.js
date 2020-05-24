@@ -47,6 +47,8 @@ export default function SaveTaskScreen({ navigation }) {
   const [completedAt, setCompletedAt] = useState();
   const [show, setShow] = useState(false);
 
+  const toggleShow = () => setShow(!show);
+
   // useEffect(() => {
   //   // if isEditMode, prepopulate task data
   //   loadScreen = () => {
@@ -231,7 +233,7 @@ export default function SaveTaskScreen({ navigation }) {
         />
         {!isLoading && displayTarget(target)}
 
-        <Button onPress={() => setShow(!show)} title="show picker" />
+        <TouchableOpacity onPress={toggleShow} title="show picker" />
         {show && (
           <DatePick setTarget={setTarget} date={target} setShow={setShow} />
         )}
