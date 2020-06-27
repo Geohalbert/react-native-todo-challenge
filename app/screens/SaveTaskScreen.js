@@ -78,13 +78,12 @@ export default function SaveTaskScreen({ navigation }) {
   };
 
   displayTarget = target => {
-    console.log(`target: ${target}`);
     const test = toTimestring(target);
-    console.log(`toTimestring: ${test}`);
     return (
-      <View style={styles.date}>
+      <TouchableOpacity style={styles.date}>
         <Text>Target: {test}</Text>
-      </View>
+        <FooterButton onPress={toggleShow} title="show picker" />
+      </TouchableOpacity>
     );
   };
 
@@ -321,7 +320,10 @@ const styles = StyleSheet.create({
   },
   date: {
     alignItems: "center",
-    flexDirection: "row"
+    flexDirection: "row",
+    borderColor: "#4d79ff",
+    borderWidth: 3,
+    justifyContent: "center"
   },
   description: {
     borderColor: "#ffffff",

@@ -18,6 +18,7 @@ import { DrawerActions } from "react-navigation-drawer";
 
 import { useDispatch, useSelector } from "react-redux";
 import TaskItem from "../components/TaskItem";
+import SearchBar from "../components/SearchBar";
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ export default function HomeScreen({ navigation }) {
   const { tasks } = dataReducer;
   // hooks
   const [isLoading, setIsLoading] = useState(false);
+  const [filteredTasks, setFilteredTasks] = useState();
 
   useEffect(() => {
     fetchTasks();
@@ -38,6 +40,97 @@ export default function HomeScreen({ navigation }) {
       setIsLoading(false);
     });
   };
+
+  filterTasks = search => {
+    // filter tasks
+    if (search) {
+      const filteredTasks = tasks.filter(task => {
+        const nameMatch =
+          task.name && task.name.toLowerCase().includes(search.toLowerCase());
+        const descMatch =
+          task.description &&
+          task.description.toLowerCase().includes(search.toLowerCase());
+        const targetMatch =
+          task.target &&
+          task.target.toLowerCase().includes(search.toLowerCase());
+        const compMatch =
+          task.completed &&
+          task.completed.toLowerCase().includes(search.toLowerCase());
+
+        // TODO add ability to filter by states
+
+        return nameMatch || descMatch || targetMatch || compMatch;
+      });
+      // update array of visible tasks
+      setFilteredTasks(filteredTasks);
+    } else {
+      // if search is empty, display all tasks
+      setFilteredTasks(tasks);
+    }
+  };
+
+  const sortedTasks =
+    filteredTasks &&
+    filteredTasks.length &&
+    filteredTasks.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
+
+  const tasksList = sortedTasks ? (
+    filteredTasks.map((task, key) => {
+      const stylesArr = [styles.memoButton];
+      if (key % 2 !== 0) {
+        stylesArr.push(styles.tint);
+      }
+      if (key === tasks.length - 1) {
+        stylesArr.push(styles.bottomBorder);
+      }
+      const comp =
+        task.completed.charAt(0).toUpperCase() + task.completed.slice(1);
+      const target = task.target.charAt(0).toUpperCase() + task.target.slice(1);
+      const desc =
+        task.description.charAt(0).toUpperCase() + task.description.slice(1);
+      const name =
+        task.name || task.name
+          ? (task.name || "-") + ", " + (task.name || "-")
+          : "-";
+
+      return (
+        <TouchableOpacity
+          style={styles.task}
+          key={key}
+          onPress={() =>
+            navigation.navigate("SaveTask", {
+              fromHome: true,
+              task,
+              isEditMode: true
+            })
+          }
+        >
+          <TaskItem
+            task={task}
+            completed={comp}
+            completedAt={task.completedAt}
+            description={desc}
+            id={task.id}
+            name={name}
+            target={target}
+          />
+        </TouchableOpacity>
+      );
+    })
+  ) : (
+    <View style={{ justifyContent: "center", alignItems: "center" }}>
+      <Text style={styles.resultsText}>No Results</Text>
+      <Text style={styles.promptText}>Please try again</Text>
+    </View>
+  );
 
   renderTasks = data => {
     return data.map((task, key) => {
@@ -79,7 +172,7 @@ export default function HomeScreen({ navigation }) {
         style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
         // onPress={() => {
         //   navigation.navigate("WaterTest", {
-        //     customerId: navigation.getParam("customerId"),
+        //     taskId: navigation.getParam("taskId"),
         //     setIsFocused: setIsFocused
         //   });
         //   setIsFocused(false);
@@ -94,7 +187,7 @@ export default function HomeScreen({ navigation }) {
       <Button
         // onPress={() => {
         //   navigation.navigate("AddPhotoModal", {
-        //     customerId: navigation.getParam("customerId"),
+        //     taskId: navigation.getParam("taskId"),
         //     setIsFocused: setIsFocused
         //   });
         //   setIsFocused(false);
@@ -110,7 +203,7 @@ export default function HomeScreen({ navigation }) {
       <Button
         // onPress={() => {
         //   navigation.navigate("AddNoteModal", {
-        //     customerId: navigation.getParam("customerId"),
+        //     taskId: navigation.getParam("taskId"),
         //     setIsFocused: setIsFocused
         //   });
         //   setIsFocused(false);
@@ -129,7 +222,15 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       {/* {isLoading && showLoading()} */}
-      {tasks && renderList(tasks)}
+      {tasks && tasks.length ? (
+        <View style={styles.tasksContainer}>
+          <SearchBar label="Search" onChangeText={this.filterTasks} />
+          <ScrollView style={styles.scrollView}>{tasksList}</ScrollView>
+        </View>
+      ) : (
+        <Text style={styles.header}>No tasks have been added.</Text>
+      )}
+      {/* {tasks && renderList(tasks)} */}
       {!isLoading && (
         <TouchableHighlight
           style={styles.button}
