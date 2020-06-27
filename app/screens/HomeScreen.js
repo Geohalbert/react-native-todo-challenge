@@ -117,7 +117,7 @@ export default function HomeScreen({ navigation }) {
             task={task}
             completed={comp}
             completedAt={task.completedAt}
-            description={desc}
+            description={description}
             id={task.id}
             name={name}
             target={target}
