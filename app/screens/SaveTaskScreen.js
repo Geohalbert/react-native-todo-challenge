@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { DrawerActions } from "react-navigation-drawer";
-import { toTimestring, toTimestamp } from "../utils/functions";
+import { toTimestring, toTimestamp } from "../utils/functions-ts";
 import { useDispatch } from "react-redux";
 import {
   createTask,

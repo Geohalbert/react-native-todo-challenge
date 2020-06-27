@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, Share, StyleSheet, TouchableOpacity, View } from "react-native";
-import { nativeShare } from "../utils/functions";
+import { nativeShare } from "../utils/functions-ts";
 
 class ShareIcon extends React.Component {
   constructor(props) {
