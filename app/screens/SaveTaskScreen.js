@@ -78,12 +78,14 @@ export default function SaveTaskScreen({ navigation }) {
   };
 
   displayTarget = target => {
-    const test = toTimestring(target);
+    const targetDate = toTimestring(target);
     return (
-      <TouchableOpacity style={styles.date}>
-        <Text>Target: {test}</Text>
-        <FooterButton onPress={toggleShow} title="show picker" />
-      </TouchableOpacity>
+      <View style={styles.date}>
+        {/* <TouchableOpacity style={styles.date}> */}
+        <Text>Target: {targetDate}</Text>
+        {/* <FooterButton onPress={toggleShow} title="show picker" />
+       </TouchableOpacity> */}
+      </View>
     );
   };
 
@@ -320,10 +322,10 @@ const styles = StyleSheet.create({
   },
   date: {
     alignItems: "center",
-    flexDirection: "row",
-    borderColor: "#4d79ff",
-    borderWidth: 3,
-    justifyContent: "center"
+    flexDirection: "row"
+    // borderColor: "#4d79ff",
+    // borderWidth: 3,
+    // justifyContent: "center"
   },
   description: {
     borderColor: "#ffffff",

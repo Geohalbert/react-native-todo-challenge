@@ -6,7 +6,7 @@ import { object } from "prop-types";
 export const toTimestamp = (strDate: string) => {
   return Date.parse(strDate);
 };
-export const toTimestring = timestamp => {
+export const toTimestring = (timestamp: string) => {
   return new Date(timestamp).toLocaleDateString();
 };
 
@@ -31,7 +31,7 @@ export async function nativeShare(task: object) {
   if (Platform.OS === "ios") {
     Share.share(
       {
-        message: `Your task '${task[name]}' is as follows: ${task[description]}`,
+        message: `Your task '${task["name"]}' is as follows: ${task["description"]}`,
         title: "Your task details"
       },
       {
@@ -44,7 +44,7 @@ export async function nativeShare(task: object) {
   } else {
     Share.share(
       {
-        message: `Your task '${task[name]}' is as follows: ${task[description]}`,
+        message: `Your task '${task["name"]}' is as follows: ${task["description"]}`,
         title: "Your task details"
       },
       {
