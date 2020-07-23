@@ -1,7 +1,5 @@
 import { Linking, Share } from "react-native";
 import { Platform } from "@unimodules/core";
-import { excludeActivity } from "./constants";
-import { object } from "prop-types";
 
 export const toTimestamp = (strDate: string) => {
   return Date.parse(strDate);
@@ -27,15 +25,35 @@ export async function urlTest(url: string) {
     .catch(err => console.error("An error occurred", err));
 }
 
-export async function nativeShare(task: object) {
+type Task = {
+  name: string,
+  description: string
+}
+
+export async function nativeShare (task: Task) {
   if (Platform.OS === "ios") {
     Share.share(
       {
-        message: `Your task '${task["name"]}' is as follows: ${task["description"]}`,
+        message: `Your task '${task.name}' is as follows: ${task["description"]}`,
         title: "Your task details"
       },
       {
-        excludedActivityTypes: excludeActivity,
+        excludedActivityTypes: [
+          "com.apple.UIKit.activity.MarkupAsPDF",
+          "com.apple.UIKit.activity.AddToReadingList",
+          "com.apple.UIKit.activity.AirDrop",
+          "com.apple.UIKit.activity.AssignToContact",
+          "com.apple.UIKit.activity.CopyToPasteboard",
+          "com.apple.UIKit.activity.OpenInIBooks",
+          "com.apple.UIKit.activity.PostToFacebook",
+          "com.apple.UIKit.activity.PostToFlickr",
+          "com.apple.UIKit.activity.PostToTencentWeibo",
+          "com.apple.UIKit.activity.PostToTwitter",
+          "com.apple.UIKit.activity.PostToVimeo",
+          "com.apple.UIKit.activity.PostToWeibo",
+          "com.apple.UIKit.activity.Print",
+          "com.apple.UIKit.activity.SaveToCameraRoll"
+        ],
         subject: "Your task details"
       }
     )

@@ -26,8 +26,8 @@ const FooterButton: React.FC<FBProps> = props => {
     title
   } = props;
 
-  const buttonStyle = [styles.button];
-  const textStyle = [styles.buttonText];
+  const buttonStyle = styles.button;
+  const textStyle = styles.buttonText;
 
   if (isEdit) {
     buttonStyle["minWidth"]= width / 2.5;
