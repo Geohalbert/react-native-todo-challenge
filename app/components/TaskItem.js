@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { toTimestring } from "../utils/functions-ts";
+import { toTimestring } from "../utils/functions";
 import ShareIcon from "./ShareIcon";
 
 export default function TaskItem(props) {

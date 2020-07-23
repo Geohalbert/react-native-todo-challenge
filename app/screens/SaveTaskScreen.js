@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { DrawerActions } from "react-navigation-drawer";
-import { toTimestring, toTimestamp } from "../utils/functions-ts";
+import { toTimestring, toTimestamp } from "../utils/functions";
 import { useDispatch } from "react-redux";
 import {
   createTask,
@@ -23,7 +23,7 @@ import {
   updateTask
 } from "../redux/actions/task.actions";
 import DatePick from "../components/DatePick";
-import FooterButton from "../components/FooterButton";
+import FooterButton from "../components/FooterButton.tsx";
 
 var width = Dimensions.get("window").width; //full width
 export default function SaveTaskScreen({ navigation }) {
@@ -83,8 +83,8 @@ export default function SaveTaskScreen({ navigation }) {
       <View style={styles.date}>
         {/* <TouchableOpacity style={styles.date}> */}
         <Text>Target: {targetDate}</Text>
-        {/* <FooterButton onPress={toggleShow} title="show picker" />
-       </TouchableOpacity> */}
+        <FooterButton onPress={toggleShow} title="show picker" />
+        {/* </TouchableOpacity> */}
       </View>
     );
   };

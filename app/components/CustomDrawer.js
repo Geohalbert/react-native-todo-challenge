@@ -14,7 +14,7 @@ import { DrawerItems } from "react-navigation-drawer";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { github, linkedIn, resume } from "../utils/constants";
-import { urlTest } from "../utils/functions-ts";
+import { urlTest } from "../utils/functions";
 
 export default function CustomDrawer(props) {
   return (
