@@ -30,7 +30,7 @@ type Task = {
   description: string
 }
 
-export async function nativeShare (task: Task) {
+export async function nativeShare(task: Task) {
   if (Platform.OS === "ios") {
     Share.share(
       {

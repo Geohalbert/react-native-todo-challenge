@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createDrawerNavigator } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
@@ -87,10 +86,3 @@ export default createAppContainer(
     }
   )
 );
-
-const styles = StyleSheet.create({
-  headerButton: {
-    paddingRight: 15,
-    alignItems: "center"
-  }
-});
