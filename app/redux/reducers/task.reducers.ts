@@ -9,7 +9,7 @@ import {
 
 let dataState = { tasks: [] };
 
-const dataReducer = (state = dataState, action) => {
+const dataReducer = (state = dataState, action: any = {}) => {
   switch (action.type) {
     case GET_TASKS:
       let { tasks } = action.data;
@@ -28,7 +28,7 @@ const dataReducer = (state = dataState, action) => {
       let clone = JSON.parse(JSON.stringify(state.tasks));
 
       // verifying that task exists
-      const index = clone.findIndex(obj => obj.id === task.id);
+      const index = clone.findIndex((obj: any) => obj['id']=== task.id);
 
       // update if task exists
       if (index !== -1) clone[index] = task;
@@ -41,7 +41,7 @@ const dataReducer = (state = dataState, action) => {
       let clone = JSON.parse(JSON.stringify(state.tasks));
 
       // verifying that task exists
-      const index = clone.findIndex(obj => obj.id === id);
+      const index = clone.findIndex((obj: any) => obj['id'] === id);
 
       // remove if task exists
       if (index !== -1) clone.splice(index, 1);
